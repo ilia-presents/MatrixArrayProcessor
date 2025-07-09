@@ -18,23 +18,19 @@ namespace MatrixArrayProcessor.LogicClasses
 
         public int[,] Create(int ArrayDimension)
         {
-            int[,] someNumbers;
+            int[,] theMatrix;
 
-            someNumbers = new int[ArrayDimension, ArrayDimension];
-
-            // int upperArrayDimension = ArrayDimension - 1;
+            theMatrix = new int[ArrayDimension, ArrayDimension];
 
             for (i = 0; i < ArrayDimension; i++) {
 
                 for (j = 0; j < ArrayDimension; j++)
                 {
-                    someNumbers[i, j] = _randomNumberCreator.Create();
+                    theMatrix[i, j] = _randomNumberCreator.Create();
                 }
             }
 
-            // Console.WriteLine(someNumbers[0, 1] + " " + someNumbers[0, 0] + " " + someNumbers[0, tempArrayDimesnion]);
-
-            return someNumbers;
+            return theMatrix;
         }
     }
 }

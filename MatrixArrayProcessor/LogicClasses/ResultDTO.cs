@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace MatrixArrayProcessor.LogicClasses
 {
     internal class ResultDTO
     {
+        public int RepeatedNumber;
 
-        //public int RowColumn
+        public int DimensionNumber;
+
+        public string DimensionName;
+
+        public int Repetitions;
     }
 }

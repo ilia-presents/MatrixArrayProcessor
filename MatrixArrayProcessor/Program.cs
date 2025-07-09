@@ -5,57 +5,111 @@ using System.Text;
 
 int RANDOM_NUMBER_UPPER_EXCLUSIVE_LIMIT = 13;
 
+int REPETITIONS_NUMBER_RULE = 5;
+
 RandomNumberCreator RandomNumberCreator = new RandomNumberCreator(RANDOM_NUMBER_UPPER_EXCLUSIVE_LIMIT);
 
-MatrixCreator matrixCreator = new MatrixCreator(RandomNumberCreator);
+MatrixCreator MatrixCreator = new MatrixCreator(RandomNumberCreator);
 
-int i; int j; string str = "";
+MatrixProcessor MatrixProcessor = new MatrixProcessor();
+
+int i; int j;
+
+bool isToStayInFirstDo=false;
+
+string strConsoleRead;
 
 StringBuilder StringBuild = new StringBuilder();
 
-int ArrayDimension = 8;
+int arrayDimension = 8;
 
-int[,] someNumbers = matrixCreator.Create(ArrayDimension);
-
-for (i = 0; i < ArrayDimension; i++)
+// The outer do-while loop is used to keep the game running until the user decides to quit.
+do
 {
+    //The inner do -while loop is used to handle user input for the stake amount or initial amount.
 
-    StringBuild.Clear();
-
-    for (j = 0; j < ArrayDimension; j++)
+    //It ensures that the user enters a valid amount before proceeding with the game or quitting.
+    do
     {
+        Console.WriteLine("Enter valid whole number between 6 and 25 or Q to quit");
 
-        StringBuild.Append(someNumbers[i, j].ToString());
+        strConsoleRead = Console.ReadLine();
 
-        if (someNumbers[i, j] < 10)
+        if ((strConsoleRead == "Q") || (strConsoleRead == "q"))
         {
+            Console.WriteLine("You have chosen to quit the game. Goodbye!");
+            return;
+        }
 
-            StringBuild.Append("  ");
+        if (int.TryParse(strConsoleRead, out int num))
+        {
+            isToStayInFirstDo = false;
+
+            arrayDimension = num;
         }
         else {
 
-            StringBuild.Append(" ");       
+            isToStayInFirstDo = true;
+            Console.WriteLine("Invalid number");
+            //throw new CustomException("Conversion from string to int failed.");
         }
-    }
 
-    Console.WriteLine(StringBuild.ToString());
-}
+        if (arrayDimension>25) {
 
-//someNumbers[0, 1] = 34;
+            Console.WriteLine("Number exceeds 25");
+            isToStayInFirstDo = true;
+        }
+    } while (isToStayInFirstDo);
+    // ============
 
-//int tempArrayDimesnion = ArrayDimension - 1;
+    int[,] theMatrix = MatrixCreator.Create(arrayDimension);
 
-//Console.WriteLine(someNumbers[0, 1] + " " + someNumbers[0, 0] + " " + someNumbers[0, tempArrayDimesnion]);
+        List<ResultDTO> ResultDTOs = MatrixProcessor.Process(theMatrix, arrayDimension, REPETITIONS_NUMBER_RULE);
 
+        if (ResultDTOs.Count > 0)
+        {
 
-//int[,] someNumbers;
+            Console.WriteLine("There were " + ResultDTOs.Count + " sequences found");
 
-//someNumbers = new int[10, 10];
+            foreach (var resultDTO in ResultDTOs)
+            {
+                Console.WriteLine("Repeated number {0}. Repeated {1} times in {2} number {3}",
+                    resultDTO.RepeatedNumber, resultDTO.Repetitions, resultDTO.DimensionName,
+                    resultDTO.DimensionNumber);
+            }
+        }
+        else
+        {
 
-//someNumbers[0, 2] = 34;
+            Console.WriteLine("There were no sequences found");
+        }
 
-//int i = 7;
+        Console.WriteLine();
 
-//someNumbers[0, i] = 44;
+        for (i = 0; i < arrayDimension; i++)
+        {
 
-//Console.WriteLine(someNumbers[0, 2] + " " + someNumbers[0, i]);
+            StringBuild.Clear();
+
+            for (j = 0; j < arrayDimension; j++)
+            {
+
+                StringBuild.Append(theMatrix[i, j].ToString());
+
+                if (theMatrix[i, j] < 10)
+                {
+
+                    StringBuild.Append("  ");
+                }
+                else
+                {
+
+                    StringBuild.Append(" ");
+                }
+            }
+
+            Console.WriteLine(StringBuild.ToString());
+        }
+        // ============
+
+} while (true);
